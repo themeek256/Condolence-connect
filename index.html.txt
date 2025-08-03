@@ -1,0 +1,761 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CondolenceConnect - Funeral Fundraising Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-blue: #4567b7;
+            --secondary-gray: #f7f7f7;
+            --accent-green: #8bc34a;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary-gray);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #5a82eb 100%);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-blue);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a56a5;
+            transform: translateY(-2px);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-green);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-accent:hover {
+            background-color: #7cb342;
+            transform: translateY(-2px);
+        }
+        
+        .campaign-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .campaign-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin: 1rem 0;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e0e0e0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent-green);
+            transition: width 0.5s ease;
+        }
+        
+        #nav-menu {
+            transition: all 0.3s ease;
+        }
+        
+        /* Mobile menu animation */
+        .mobile-menu-enter {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        
+        .mobile-menu-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-exit {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .mobile-menu-exit-active {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+        
+        /* Donation form styling */
+        .donation-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .donation-option:hover, .donation-option.selected {
+            border-color: var(--accent-green);
+            background-color: rgba(139, 195, 74, 0.1);
+        }
+        
+        /* Memorial wall styling */
+        .memory-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .memory-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-content {
+                text-align: center;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+            }
+            
+            .stat-item {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="flex items-center justify-center w-12 h-12 rounded-full bg-primary-blue text-white mr-3">
+                    <i class="fas fa-dove text-2xl"></i>
+                </div>
+                <span class="text-xl font-semibold text-gray-800">CondolenceConnect</span>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="text-gray-800 hover:text-primary-blue font-medium">Home</a>
+                <a href="#features" class="text-gray-800 hover:text-primary-blue font-medium">Features</a>
+                <a href="#campaigns" class="text-gray-800 hover:text-primary-blue font-medium">Campaigns</a>
+                <a href="#resources" class="text-gray-800 hover:text-primary-blue font-medium">Resources</a>
+                <a href="#about" class="text-gray-800 hover:text-primary-blue font-medium">About</a>
+            </nav>
+            
+            <div class="hidden md:flex space-x-4">
+                <button class="btn-primary text-white px-4 py-2 rounded-lg font-medium">Sign In</button>
+                <button class="btn-accent text-white px-4 py-2 rounded-lg font-medium">Create Campaign</button>
+            </div>
+            
+            <button id="mobile-menu-button" class="md:hidden text-gray-800 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-md">
+            <div class="flex flex-col space-y-4">
+                <a href="#home" class="text-gray-800 hover:text-primary-blue font-medium py-2 border-b border-gray-100">Home</a>
+                <a href="#features" class="text-gray-800 hover:text-primary-blue font-medium py-2 border-b border-gray-100">Features</a>
+                <a href="#campaigns" class="text-gray-800 hover:text-primary-blue font-medium py-2 border-b border-gray-100">Campaigns</a>
+                <a href="#resources" class="text-gray-800 hover:text-primary-blue font-medium py-2 border-b border-gray-100">Resources</a>
+                <a href="#about" class="text-gray-800 hover:text-primary-blue font-medium py-2 border-b border-gray-100">About</a>
+                <div class="flex space-x-4 pt-2">
+                    <button class="btn-primary text-white px-4 py-2 rounded-lg font-medium w-full">Sign In</button>
+                    <button class="btn-accent text-white px-4 py-2 rounded-lg font-medium w-full">Create Campaign</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient text-white py-20">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 hero-content mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">Honoring Lives Through Compassionate Fundraising</h1>
+                    <p class="text-xl mb-8 opacity-90">A dignified platform to create memorial funds and receive support during difficult times</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button class="btn-accent text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all">
+                            Start a Campaign <i class="fas fa-chevron-right ml-2"></i>
+                        </button>
+                        <button class="bg-white text-primary-blue px-6 py-3 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all">
+                            How It Works <i class="fas fa-play-circle ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://placehold.co/600x400" alt="Comforting image of hands holding together in support with soft focus background" class="rounded-lg shadow-xl w-full max-w-md">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="bg-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap stats-container justify-between text-center">
+                <div class="stat-item px-4 py-6 w-full sm:w-1/3">
+                    <h3 class="text-4xl font-bold text-primary-blue mb-2">$2.4M+</h3>
+                    <p class="text-gray-600">Raised for families</p>
+                </div>
+                <div class="stat-item px-4 py-6 w-full sm:w-1/3 border-t sm:border-t-0 sm:border-l border-gray-200">
+                    <h3 class="text-4xl font-bold text-primary-blue mb-2">1,240+</h3>
+                    <p class="text-gray-600">Memorial campaigns</p>
+                </div>
+                <div class="stat-item px-4 py-6 w-full sm:w-1/3 border-t sm:border-t-0 sm:border-l border-gray-200">
+                    <h3 class="text-4xl font-bold text-primary-blue mb-2">9.8/10</h3>
+                    <p class="text-gray-600">Satisfaction rating</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-secondary-gray">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Dignified Fundraising Features</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Our platform provides everything you need to create a meaningful memorial fundraiser with ease and compassion</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white rounded-xl p-6 shadow-md campaign-card">
+                    <div class="w-16 h-16 rounded-full bg-primary-blue bg-opacity-10 flex items-center justify-center mb-4">
+                        <i class="fas fa-heart text-primary-blue text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">Effortless Campaign Setup</h3>
+                    <p class="text-gray-600">Create a personalized memorial page in minutes with our step-by-step guide, honoring your loved one's memory.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-white rounded-xl p-6 shadow-md campaign-card">
+                    <div class="w-16 h-16 rounded-full bg-primary-blue bg-opacity-10 flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-primary-blue text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">Secure Donations</h3>
+                    <p class="text-gray-600">Bank-level security ensures all contributions are processed safely with multiple payment options for donors.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-white rounded-xl p-6 shadow-md campaign-card">
+                    <div class="w-16 h-16 rounded-full bg-primary-blue bg-opacity-10 flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-primary-blue text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">Real-Time Tracking</h3>
+                    <p class="text-gray-600">See donations as they come in with detailed analytics and automatic updates for campaign organizers.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="bg-white rounded-xl p-6 shadow-md campaign-card">
+                    <div class="w-16 h-16 rounded-full bg-primary-blue bg-opacity-10 flex items-center justify-center mb-4">
+                        <i class="fas fa-users text-primary-blue text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">Community Support</h3>
+                    <p class="text-gray-600">A shared space for friends and family to leave condolences, share memories, and offer support.</p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="bg-white rounded-xl p-6 shadow-md campaign-card">
+                    <div class="w-16 h-16 rounded-full bg-primary-blue bg-opacity-10 flex items-center justify-center mb-4">
+                        <i class="fas fa-home text-primary-blue text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">Funeral Home Integration</h3>
+                    <p class="text-gray-600">Seamless coordination with funeral directors to streamline setup and management.</p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="bg-white rounded-xl p-6 shadow-md campaign-card">
+                    <div class="w-16 h-16 rounded-full bg-primary-blue bg-opacity-10 flex items-center justify-center mb-4">
+                        <i class="fas fa-hands-helping text-primary-blue text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">Grief Resources</h3>
+                    <p class="text-gray-600">Access to counseling services, support groups, and helpful articles during difficult times.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Simple Process, Meaningful Impact</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Setting up a memorial fundraiser takes just a few minutes</p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-center mb-16">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <img src="https://placehold.co/600x400" alt="Person using laptop to create memorial campaign with step-by-step interface visible on screen" class="rounded-lg shadow-md w-full max-w-md">
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                    <div class="flex items-start mb-6">
+                        <div class="w-12 h-12 rounded-full bg-primary-blue text-white flex items-center justify-center mr-4 flex-shrink-0">
+                            <span class="text-xl font-bold">1</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-gray-800">Create Your Memorial Page</h3>
+                            <p class="text-gray-600">Share photos, stories, and details about your loved one to create a personalized tribute.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start mb-6">
+                        <div class="w-12 h-12 rounded-full bg-primary-blue text-white flex items-center justify-center mr-4 flex-shrink-0">
+                            <span class="text-xl font-bold">2</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-gray-800">Set Your Fundraising Goal</h3>
+                            <p class="text-gray-600">Determine the amount needed for funeral expenses, memorial services, or charitable causes.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 rounded-full bg-primary-blue text-white flex items-center justify-center mr-4 flex-shrink-0">
+                            <span class="text-xl font-bold">3</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-gray-800">Share With Friends & Family</h3>
+                            <p class="text-gray-600">Easily distribute your campaign through email, social media, or direct links.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button class="btn-accent text-white px-8 py-3 rounded-lg font-medium text-lg shadow-lg hover:shadow-xl transition-all">
+                    Start Your Campaign Today <i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Active Campaigns Section -->
+    <section id="campaigns" class="py-20 bg-secondary-gray">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Featured Memorial Campaigns</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Recent campaigns from our compassionate community</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Campaign 1 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md campaign-card">
+                    <div class="relative">
+                        <img src="https://placehold.co/600x400" alt="Elderly gentleman smiling in garden setting with family members nearby" class="w-full h-48 object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-20"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Remembering John Michaels</h3>
+                        <p class="text-gray-600 mb-4">Helping the family with unexpected funeral expenses</p>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-600">Raised: $8,425</span>
+                                <span class="text-gray-600">Goal: $12,000</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600"><i class="fas fa-users mr-1"></i> 74 donors</span>
+                            <span class="text-gray-600"><i class="fas fa-clock mr-1"></i> 12 days left</span>
+                        </div>
+                        
+                        <button class="btn-primary text-white w-full mt-4 py-2 rounded-lg font-medium">Donate Now</button>
+                    </div>
+                </div>
+                
+                <!-- Campaign 2 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md campaign-card">
+                    <div class="relative">
+                        <img src="https://placehold.co/600x400" alt="Young woman laughing with children at park playground" class="w-full h-48 object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-20"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Sarah's Children Fund</h3>
+                        <p class="text-gray-600 mb-4">Support for Sarah's children after her sudden passing</p>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-600">Raised: $23,150</span>
+                                <span class="text-gray-600">Goal: $30,000</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 77%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600"><i class="fas fa-users mr-1"></i> 142 donors</span>
+                            <span class="text-gray-600"><i class="fas fa-clock mr-1"></i> 21 days left</span>
+                        </div>
+                        
+                        <button class="btn-primary text-white w-full mt-4 py-2 rounded-lg font-medium">Donate Now</button>
+                    </div>
+                </div>
+                
+                <!-- Campaign 3 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md campaign-card">
+                    <div class="relative">
+                        <img src="https://placehold.co/600x400" alt="Military service member in uniform standing proudly with family" class="w-full h-48 object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent h-20"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Honoring Sgt. Mark Reynolds</h3>
+                        <p class="text-gray-600 mb-4">Memorial service and veteran support fund</p>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-600">Raised: $15,820</span>
+                                <span class="text-gray-600">Goal: $20,000</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 79%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600"><i class="fas fa-users mr-1"></i> 98 donors</span>
+                            <span class="text-gray-600"><i class="fas fa-clock mr-1"></i> 5 days left</span>
+                        </div>
+                        
+                        <button class="btn-primary text-white w-full mt-4 py-2 rounded-lg font-medium">Donate Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="border-2 border-primary-blue text-primary-blue px-6 py-2 rounded-lg font-medium hover:bg-primary-blue hover:text-white transition-all">
+                    View All Campaigns <i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Words From Our Community</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Families who have found comfort and support through CondolenceConnect</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <div class="flex items-center mb-4">
+                        <img src="https://placehold.co/80x80" alt="Portrait of middle-aged woman with short brown hair smiling gently" class="w-16 h-16 rounded-full mr-4 object-cover">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Lisa Thompson</h4>
+                            <p class="text-gray-600">Daughter of John Michaels</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"CondolenceConnect helped us navigate the financial burden during our most difficult time. The outpouring of support from friends and even strangers touched our hearts deeply."</p>
+                    <div class="text-primary-blue">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <div class="flex items-center mb-4">
+                        <img src="https://placehold.co/80x80" alt="Portrait of young man with beard looking thoughtful" class="w-16 h-16 rounded-full mr-4 object-cover">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">David Rodriguez</h4>
+                            <p class="text-gray-600">Brother of Sarah Rodriguez</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"The ease of setting up Sarah's memorial fund allowed us to focus on grieving rather than paperwork. The grief resources provided were also incredibly helpful for our family."</p>
+                    <div class="text-primary-blue">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card md:col-span-2">
+                    <div class="flex flex-col md:flex-row items-center mb-4">
+                        <img src="https://placehold.co/80x80" alt="Portrait of funeral director in professional attire with kind expression" class="w-16 h-16 rounded-full mr-4 object-cover mb-4 md:mb-0">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">James Wilson</h4>
+                            <p class="text-gray-600">Funeral Director at Wilson Funeral Home</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"As a funeral director, I've seen firsthand how financial stress compounds grief. CondolenceConnect has become an invaluable resource for families we serve, providing both financial relief and emotional support through its comprehensive approach."</p>
+                    <div class="text-primary-blue">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grief Resources Section -->
+    <section id="resources" class="py-20 bg-primary-blue text-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Grief Support Resources</h2>
+                <p class="text-xl opacity-90 max-w-3xl mx-auto">Helpful resources for coping with loss and honoring memories</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <!-- Resource 1 -->
+                <div class="bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm">
+                    <div class="w-14 h-14 rounded-full bg-white bg-opacity-20 flex items-center justify-center mb-4">
+                        <i class="fas fa-book-open text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Grief Literature</h3>
+                    <p class="opacity-90 mb-4">Recommended books and articles to help navigate the grieving process at your own pace.</p>
+                    <a href="#" class="text-accent-green font-medium flex items-center hover:underline">
+                        Explore Resources <i class="fas fa-chevron-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Resource 2 -->
+                <div class="bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm">
+                    <div class="w-14 h-14 rounded-full bg-white bg-opacity-20 flex items-center justify-center mb-4">
+                        <i class="fas fa-headset text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Counseling Services</h3>
+                    <p class="opacity-90 mb-4">Connect with licensed grief counselors and support hotlines available 24/7.</p>
+                    <a href="#" class="text-accent-green font-medium flex items-center hover:underline">
+                        Find Support <i class="fas fa-chevron-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Resource 3 -->
+                <div class="bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm">
+                    <div class="w-14 h-14 rounded-full bg-white bg-opacity-20 flex items-center justify-center mb-4">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Support Groups</h3>
+                    <p class="opacity-90 mb-4">Local and virtual support groups where you can share experiences with others who understand.</p>
+                    <a href="#" class="text-accent-green font-medium flex items-center hover:underline">
+                        Join a Group <i class="fas fa-chevron-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button class="bg-white text-primary-blue px-8 py-3 rounded-lg font-medium text-lg shadow-lg hover:shadow-xl transition-all">
+                    Browse All Resources <i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Memorial Wall Example -->
+    <section id="memorial-wall" class="py-20 bg-secondary-gray">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Virtual Memorial Wall</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">A space to share memories, condolences, and reflections</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                <div class="p-6">
+                    <div class="flex items-center mb-6">
+                        <img src="https://placehold.co/80x80" alt="Campaign organizer's profile picture - smiling woman with gray hair" class="w-16 h-16 rounded-full mr-4 object-cover">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Remembering Margaret Fields</h3>
+                            <p class="text-gray-600">Created by Emily Fields • Last updated 2 days ago</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <img src="https://placehold.co/800x450" alt="Black and white photo of elderly woman sitting in rocking chair reading to grandchildren" class="w-full h-auto rounded-lg mb-4">
+                        <p class="text-gray-700">Mom lived a full life filled with love for her family and dedication to her community. We invite you to share your memories of her and contribute to the memorial fund in her honor.</p>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="mb-6">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-600">Raised: $7,840</span>
+                            <span class="text-gray-600">Goal: $10,000</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 78%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-4 mb-8">
+                        <button class="btn-primary text-white px-6 py-2 rounded-lg font-medium flex-1">Donate Now</button>
+                        <button class="border border-primary-blue text-primary-blue px-6 py-2 rounded-lg font-medium flex-1">Share Campaign</button>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-6">
+                        <h4 class="text-lg font-semibold mb-4 text-gray-800">Messages of Condolence</h4>
+                        
+                        <!-- Memory 1 -->
+                        <div class="memory-card">
+                            <div class="flex items-center mb-3">
+                                <img src="https://placehold.co/50x50" alt="Portrait of middle-aged man with glasses and short gray hair" class="w-10 h-10 rounded-full mr-3 object-cover">
+                                <div>
+                                    <h5 class="font-medium text-gray-800">Robert Johnson</h5>
+                                    <p class="text-xs text-gray-500">Posted 2 days ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-2">Margaret was the kindest neighbor anyone could ask for. She always had fresh baked cookies for the kids and sage advice for the adults. She'll be deeply missed on Maple Street.</p>
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <button class="flex items-center mr-4 hover:text-primary-blue">
+                                    <i class="fas fa-heart mr-1"></i> 12
+                                </button>
+                                <button class="flex items-center hover:text-primary-blue">
+                                    <i class="fas fa-reply mr-1"></i> Reply
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Memory 2 -->
+                        <div class="memory-card">
+                            <div class="flex items-center mb-3">
+                                <img src="https://placehold.co/50x50" alt="Portrait of young woman with long brown hair smiling" class="w-10 h-10 rounded-full mr-3 object-cover">
+                                <div>
+                                    <h5 class="font-medium text-gray-800">Susan Chen</h5>
+                                    <p class="text-xs text-gray-500">Posted 1 day ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 mb-2">Mrs. Fields was my Sunday school teacher for years. Her patience and wisdom helped shape who I am today. My thoughts and prayers are with the entire Fields family during this time.</p>
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <button class="flex items-center mr-4 hover:text-primary-blue">
+                                    <i class="fas fa-heart mr-1"></i> 8
+                                </button>
+                                <button class="flex items-center hover:text-primary-blue">
+                                    <i class="fas fa-reply mr-1"></i> Reply
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Add Memory Form -->
+                        <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                            <textarea class="w-full border border-gray-300 rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent" placeholder="Share your memory or condolence..." rows="3"></textarea>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" class="rounded text-primary-blue focus:ring-primary-blue">
+                                        <span class="ml-2 text-gray-700 text-sm">Include my name</span>
+                                    </label>
+                                </div>
+                                <button class="btn-accent text-white px-4 py-2 rounded-lg font-medium">Post Message</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Process Example -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Simple, Secure Donations</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Your contributions make a meaningful difference</p>
+            </div>
+            
+            <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="bg-primary-blue text-white p-6">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center">
+                        Donate to: Remembering Margaret Fields
+                    </h3>
+                    <p class="opacity-90">Help cover funeral expenses and create a memorial scholarship</p>
+                </div>
+                
+                <div class="p-6">
+                    <!-- Donation Amount Selection -->
+                    <div class="mb-8">
+                        <h4 class="text-lg font-semibold mb-4 text-gray-800">Donation Amount</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                            <div class="donation-option selected">
+                                <div class="text-center">$25</div>
+                            </div>
+                            <div class="donation-option">
+                                <div class="text-center">$50</div>
+                            </div>
+                            <div class="donation-option">
+                                <div class="text-center">$100</div>
+                            </div>
+                            <div class="donation-option">
+                                <div class="text-center">$250</div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                            <input type="text" class="w-full pl-8 border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent" placeholder="Other amount">
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Method -->
+                    <div class="mb-8">
+                        <h4 class="text-lg font-semibold mb-4 text-gray-800">Payment Method</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center p-3 border border-gray-300 rounded-lg hover:border-primary-blue">
+                                <input type="radio" name="payment" id="credit-card" class="mr-3" checked>
+                                <label for="credit-card" class="flex items-center w-full">
+                                    <i class="fas fa-credit-card text-gray-700 text-xl mr-3"></i>
+                                    <span>Credit/Debit Card</span>
+                                </label>
+                            </div>
+                            <div class="flex items-center p-3 border border-gray-300 rounded-lg hover:border-primary-blue">
+                                <input type="radio" name="payment" id="paypal" class="mr-3">
+                                <label for="paypal" class="flex items-center w-full">
+                                    <i class="fab fa-paypal text-blue-500 text-xl mr-3"></i>
+                                    <span>PayPal</span>
+                                </label>
+                            </div>
+                            <div class="flex items-center p-3 border border-gray-300 rounded-lg hover:border-primary-blue">
+                                <input type="radio" name="payment" id="bank-transfer" class="mr-3">
+                                <label for="bank-transfer" class="flex items-center w-full">
+                                    <i class="fas fa-university text-gray-700 text-xl mr-3"></i>
+                                    <span>Bank Transfer</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Donor Information -->
+                    <div class="mb-8">
+                        <h4 class="text-lg font-semibold mb-4 text-gray-800">Your Information</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="first-name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                                <input type="text" id="first-name" class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                           
